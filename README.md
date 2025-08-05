@@ -78,7 +78,7 @@ usermod -aG sudo nas
 This is for security, as the username is always root and the access rights are unlimited.
 
 ```bash
-sudo nano /etc/ssh/sshd_config
+nano /etc/ssh/sshd_config
 ```
 Go to line 33, change `PermitRootLogin yes` to `PermitRootLogin no`.
 ```bash
@@ -113,6 +113,34 @@ deb-src http://deb.debian.org/debian bookworm-updates main non-free-firmware con
 
 deb http://deb.debian.org/debian bookworm-backports main non-free-firmware contrib
 deb-src http://deb.debian.org/debian bookworm-backports main non-free-firmware contrib
+```
+
+### CPU Fan Configuration
+
+To address potential CPU fan issues, follow these steps:
+
+1. Open the GPIO configuration file:
+
+```bash
+nano /boot/rk3588.dtb
+```
+
+2. Locate the `fan` section and modify it as follows:
+
+```
+fan: pwm-fan {
+    compatible = "pwm-fan";
+    #cooling-cells = <2>;
+    pwms = <&pwm14 0 50000 0>;
+    cooling-levels = <0 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 36 255>;
+    status = "okay";
+};
+```
+
+3. Save the file and reboot the system:
+
+```bash
+reboot
 ```
 
 ### Compiling linux-headers for DKMS (Dynamic Kernel Module Support)
